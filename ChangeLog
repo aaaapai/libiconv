@@ -1,3 +1,16 @@
+2025-02-14  Bruno Haible  <bruno@clisp.org>
+
+	Fix a buffer overrun in the GB18030 converter (regression 2023-05-29).
+	Reported by Nick Wellnhofer <wellnhofer@aevum.de>.
+	* lib/gb18030_2005.h (gb18030_2005_wctomb): Return RET_TOOSMALL if there
+	is not enough room for 4 bytes.
+
+2024-12-28  Bruno Haible  <bruno@clisp.org>
+
+	Update after gnulib changed.
+	* Makefile.devel (GNULIB_MODULES): Use the new names of renamed gnulib
+	modules.
+
 2024-12-15  Bruno Haible  <bruno@clisp.org>
 
 	Update translations.

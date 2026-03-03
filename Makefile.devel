@@ -73,6 +73,7 @@ all : srclib/Makefile.in \
 
 GNULIB_MODULES = \
   binary-io \
+  bool \
   error \
   gettext \
   gettext-h \
@@ -82,11 +83,10 @@ GNULIB_MODULES = \
   relocatable-prog \
   safe-read \
   sigpipe \
-  stdbool \
-  stdio \
-  stdlib \
+  stdio-h \
+  stdlib-h \
   strerror \
-  unistd \
+  unistd-h \
   uniwidth/width \
   unlocked-io \
   xalloc \
