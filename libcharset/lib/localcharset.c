@@ -814,7 +814,7 @@ static const struct table_entry locale_table[] =
 
 #endif
 
-#ifdef __ANDROID__ && __ANDROID_API__ < 26
+#if defined(__ANDROID__) && defined(__ANDROID_API__ < 26)
 #ifdef STATIC
 STATIC
 #endif
@@ -954,7 +954,7 @@ nl_langinfo (nl_item item)
       return "";
     }
 }
-// #endif //__ANDROID__ && __ANDROID_API__ < 26
+#endif //__ANDROID__ && __ANDROID_API__ < 26
 
 /* Determine the current locale's character encoding, and canonicalize it
    into one of the canonical names listed below.
