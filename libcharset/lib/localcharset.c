@@ -816,7 +816,7 @@ static const struct table_entry locale_table[] =
 
 #endif
 
-#ifdef __ANDROID__ && __ANDROID_API__ < 26
+#if defined(__ANDROID__) && __ANDROID_API__ < 26
 #ifdef STATIC
 STATIC
 #endif
