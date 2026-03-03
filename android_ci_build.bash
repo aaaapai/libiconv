@@ -39,6 +39,18 @@ export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
 export STRIP=$TOOLCHAIN/bin/llvm-strip
 export LINK=$TOOLCHAIN/bin/llvm-link
 
+sudo apt update
+sudo apt install gettext libtool pkg-config
+
+for i in aclocal; do
+    echo "$i"
+    $i
+    if [ $? -ne 0 ]; then
+	echo "Error $? in $i"
+	exit 1
+    fi
+done
+
 for i in autoconf; do
     echo "$i"
     $i
