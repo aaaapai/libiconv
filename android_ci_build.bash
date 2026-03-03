@@ -1,6 +1,8 @@
 #!/bin/bash
 # set -e
 
+sudo apt-get install gperf
+
 cmake_build () {
   ANDROID_ABI=$1
   mkdir -p $ANDROID_ABI/build
