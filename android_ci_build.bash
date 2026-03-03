@@ -3,16 +3,23 @@ set -e
 
 sudo apt-get install gperf build-essential flex bison autoconf automake libtool
 
-# 1. 先本地编译生成工具
+# 1. 直接编译所有工具（不经过CMake）
 echo "Building host tools..."
-mkdir -p host-tools
-cd host-tools
-cmake $GITHUB_WORKSPACE
-make genaliases genaliases_aix genaliases_aix_sysaix genaliases_dos genaliases_extra gentranslit genflags
+cd lib
+
+# 用gcc直接编译，不继承任何环境变量
+gcc -O2 -o genaliases genaliases.c
+gcc -O2 -o genaliases_aix genaliases_aix.c
+gcc -O2 -o genaliases_aix_sysaix genaliases_aix_sysaix.c
+gcc -O2 -o genaliases_dos genaliases_dos.c
+gcc -O2 -o genaliases_extra genaliases_extra.c
+gcc -O2 -o gentranslit gentranslit.c
+gcc -O2 -o genflags genflags.c
+
 cd ..
 
 # 2. 复制工具到PATH
-export PATH=$PATH:$(pwd)/host-tools
+export PATH=$PATH:$(pwd)/lib
 
 cmake_build() {
     ANDROID_ABI=$1
