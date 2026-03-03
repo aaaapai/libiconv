@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.2...3.31 FATAL_ERROR)
 
 project(libiconv C)
+set(CMAKE_C_STANDARD 23)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -13,7 +14,6 @@ include(CheckSymbolExists)
 include(CheckTypeSize)
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
-include(TestBigEndian)
 
 set(LIBCHARSET_VERSION_MAJOR 1)
 set(LIBCHARSET_VERSION_MINOR 5)
@@ -33,10 +33,14 @@ set(LIBICONV_SOVERSION_MINOR 7)
 set(LIBICONV_SOVERSION_PATCH 0)
 set(LIBICONV_SOVERSION ${LIBICONV_SOVERSION_MAJOR}.${LIBICONV_SOVERSION_MINOR}.${LIBICONV_SOVERSION_PATCH})
 
-option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -pipe -integrated-as -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -mllvm -polly-invariant-load-hoisting -flto -mllvm -polly-run-inliner -mllvm -polly-run-dce -fno-emulated-tls -fwhole-program-vtables -fdata-sections -ffunction-sections -fmerge-all-constants -mllvm -polly-detect-keep-going -mllvm -polly-ast-use-context -march=armv8-a+simd -fvisibility=hidden -Wall -Wextra -ferror-limit=0 -Wno-return-type -Wno-unused-parameter -Wno-c++98-compat -Wno-c++98-compat-pedantic -DGLM_FORCE_INTRINSICS -Wno-unicode-whitespace -Wno-format -Wno-unused-function -DUseFastSTL -DUseJEMALLOC -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -pipe -integrated-as -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -mllvm -polly-invariant-load-hoisting -flto -mllvm -polly-run-inliner -mllvm -polly-run-dce -fno-emulated-tls -fwhole-program-vtables -fdata-sections -ffunction-sections -fmerge-all-constants -mllvm -polly-detect-keep-going -mllvm -polly-ast-use-context -march=armv8-a+simd -fvisibility=hidden -Wall -Wextra -ferror-limit=0 -Wno-return-type -Wno-unused-parameter -Wno-c++98-compat -Wno-c++98-compat-pedantic -DGLM_FORCE_INTRINSICS -stdlib=libc++ -Wno-unicode-whitespace -Wno-format -Wno-unused-function -Wno-vla-cxx-extension -DUseFastSTL -frtti -DUseJEMALLOC -pthread")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld -flto -O3 -Wl,-plugin-opt=-emulated-tls=0 -Wl,--strip-all -fvisibility=hidden -Wl,-O3 -Wl,--gc-sections -Wl,--as-needed -static-libstdc++")
+
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 option(LIBICONV_BUILD_DOCUMENTATION "Build documentation" OFF)
-option(LIBICONV_ENABLE_EXTRA "Enable a few rarely used encodings" OFF)
-option(LIBICONV_ENABLE_NLS "Translate program messages to user's native language" OFF)
+option(LIBICONV_ENABLE_EXTRA "Enable a few rarely used encodings" ON)
+option(LIBICONV_ENABLE_NLS "Translate program messages to user's native language" ON)
 
 if(NOT TARGET gperf::gperf)
 	find_package(Gperf CONFIG)
