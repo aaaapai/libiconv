@@ -34,9 +34,9 @@
 #define USE_ZOS
 #define USE_EXTRA
 
-struct loop_funcs {};
-struct iconv_hooks {};
-struct iconv_fallbacks {};
+struct loop_funcs { char x; };
+struct iconv_hooks { char x; };
+struct iconv_fallbacks { char x; };
 #define ICONV_SURFACE_EBCDIC_ZOS_UNIX  1
 #include "converters.h"
 
