@@ -56,6 +56,7 @@ if [ $? -ne 0 ]; then
 fi
 EOF
 
+./autogen.sh
 ./configure \
   --enable-autogen "$@" \
   --host=$TARGET \
