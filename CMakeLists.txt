@@ -14,6 +14,7 @@ include(CheckSymbolExists)
 include(CheckTypeSize)
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
+include(TestBigEndian)
 
 set(LIBCHARSET_VERSION_MAJOR 1)
 set(LIBCHARSET_VERSION_MINOR 5)
