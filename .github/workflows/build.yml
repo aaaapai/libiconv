@@ -1,47 +1,29 @@
-name: Build
+name: Android build
 
-on:
-  push:
-  workflow_dispatch:
-
-env:
-  BUILD_TYPE: Release
-  CCACHE_DIR: /tmp/ccache  # 设置ccache缓存目录
+on: [workflow_dispatch]
 
 jobs:
   build:
+    strategy:
+      matrix:
+        arch: [ "arm64" ]
+      fail-fast: false
+
     runs-on: ubuntu-24.04
-    
     steps:
-    - uses: actions/checkout@main
-      with:
-         submodules: true
-    
-    # 添加ccache步骤
-    - name: CCache
-      uses: hendrikmuhs/ccache-action@main
-      with:
-        key: ${{ runner.os }}-ndk-${{ env.BUILD_TYPE }}
-        max-size: 1G  # 设置缓存大小，根据需要调整
-    
-    # 将ccache添加到PATH
-    - name: Setup ccache in PATH
+    - name: Checkout repository
+      uses: actions/checkout@main
+
+    - name: Build for Android ${{matrix.arch}}
       run: |
-        echo "/usr/lib/ccache" >> $GITHUB_PATH
-        echo "CCACHE_DIR=/tmp/ccache" >> $GITHUB_ENV
-        echo "CCACHE_MAXSIZE=1G" >> $GITHUB_ENV
-    
-    - name: Configure CMake and Build
-      run: bash android_ci_build.bash
-      env:
-        CC: ccache clang
-        CXX: ccache clang++
-        CMAKE_C_COMPILER_LAUNCHER: ccache
-        CMAKE_CXX_COMPILER_LAUNCHER: ccache
-    
-    - name: Upload build output
+        export BUILD_ARCH=${{matrix.arch}}
+        bash ci_build_android.bash
+
+    - name: Upload
       uses: actions/upload-artifact@main
       with:
-        name: MobileGL
+        name: file
         path: |
-              **/lib*.a
+              lib/
+              include/
+        
