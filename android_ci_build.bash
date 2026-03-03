@@ -1,7 +1,7 @@
 #!/bin/bash
 # set -e
 
-sudo apt-get install gperf
+sudo apt-get install gperf build-essential flex bison autoconf automake libtool
 
 cmake_build () {
   ANDROID_ABI=$1
