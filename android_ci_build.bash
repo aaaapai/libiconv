@@ -14,11 +14,9 @@ elif [ "$BUILD_ARCH" == "x64" ]; then
   export NDK_ABI=x86_64 NDK_TARGET=x86_64
 fi
 
-if ! command -v aclocal &> /dev/null; then
-    echo "Installing host build tools..."
-    sudo apt update
-    sudo apt install -y gettext autopoint libtool
-fi
+echo "Installing host build tools..."
+sudo apt update
+sudo apt install -y gettext autopoint libtool
 
 # 生成构建系统
 # echo "=== Generating build system ==="
