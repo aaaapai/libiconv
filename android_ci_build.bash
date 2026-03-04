@@ -16,7 +16,7 @@ fi
 
 echo "Installing host build tools..."
 sudo apt update
-sudo apt install -y gettext autopoint libtool
+sudo apt install -y gettext autopoint libtool gperf
 
 # 生成构建系统
 # echo "=== Generating build system ==="
@@ -37,7 +37,7 @@ export NM=$TOOLCHAIN/bin/llvm-nm
 export CFLAGS="-O3 -flto=thin -I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
 export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${TARGET}/${API}"
 
-./gitsub.sh pull
+# ./gitsub.sh pull
 ./autogen.sh
 
 cmake_build () {
