@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 export API=26
 
@@ -21,8 +21,8 @@ if ! command -v aclocal &> /dev/null; then
 fi
 
 # 生成构建系统
-echo "=== Generating build system ==="
-autoreconf -vif
+# echo "=== Generating build system ==="
+# autoreconf -vif
 
 export TARGET=$NDK_TARGET-linux-android
 export TOOLCHAIN=$ANDROID_NDK_LATEST_HOME/toolchains/llvm/prebuilt/linux-x86_64
@@ -39,6 +39,9 @@ export NM=$TOOLCHAIN/bin/llvm-nm
 export CFLAGS="-O3 -flto=thin -I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
 export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${TARGET}/${API}"
 
+./autogen.sh
+
+<< EOF
 # 配置 for Android
 echo "=== Configuring for Android ==="
 ./configure \
@@ -58,3 +61,17 @@ make -j6 V=1
 echo "=== Result ==="
 ls -la lib/.libs/libiconv.a
 file lib/.libs/libiconv.a
+EOF
+
+cmake_build () {
+  ANDROID_ABI=$1
+  mkdir -p $ANDROID_ABI/build
+  cd $ANDROID_ABI/build
+  cmake $GITHUB_WORKSPACE -DANDROID_PLATFORM=26 -DANDROID_ABI=$ANDROID_ABI -DCMAKE_ANDROID_STL_TYPE=c++_static -DCMAKE_SYSTEM_NAME=Android -DANDROID_TOOLCHAIN=clang -DCMAKE_MAKE_PROGRAM=$ANDROID_NDK_LATEST_HOME/prebuilt/linux-x86_64/bin/make -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_LATEST_HOME/build/cmake/android.toolchain.cmake -DThreads_FOUND=ON -DCMAKE_THREAD_LIBS_INIT="-pthread" -DCMAKE_USE_PTHREADS_INIT=ON
+  cmake --build . --config Release --parallel 6
+  # 在bash中启用globstar
+  # shopt -s globstar
+  # $ANDROID_NDK_LATEST_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip $GITHUB_WORKSPACE/**/libiconv.so
+}
+
+cmake_build arm64-v8a
