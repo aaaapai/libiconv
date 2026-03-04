@@ -28,9 +28,6 @@ sudo apt install -y gettext autopoint libtool gperf
 # 手动编译 genaliases
 gcc -o genaliases ./lib/genaliases.c
 
-# 手动编译 genaliases_aix
-gcc -DUSE_AIX -o genaliases_aix ./lib/genaliases2.c lib/encodings_aix.def
-
 # 手动编译 gentranslit
 gcc -o gentranslit ./lib/gentranslit.c
 
