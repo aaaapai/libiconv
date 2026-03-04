@@ -39,29 +39,8 @@ export NM=$TOOLCHAIN/bin/llvm-nm
 export CFLAGS="-O3 -flto=thin -I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
 export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${TARGET}/${API}"
 
+./gitsub.sh pull
 ./autogen.sh
-
-<< EOF
-# 配置 for Android
-echo "=== Configuring for Android ==="
-./configure \
-  --host=$TARGET \
-  --build=$(./config.guess) \
-  --prefix=${PWD}/build_android-$BUILD_ARCH \
-  --enable-static \
-  --disable-shared \
-  --enable-nls \
-  --enable-doc=no
-
-# 编译
-echo "=== Building ==="
-make -j6 V=1
-
-# 输出结果
-echo "=== Result ==="
-ls -la lib/.libs/libiconv.a
-file lib/.libs/libiconv.a
-EOF
 
 cmake_build () {
   ANDROID_ABI=$1
