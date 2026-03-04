@@ -22,6 +22,18 @@ sudo apt install -y gettext autopoint libtool gperf
 # echo "=== Generating build system ==="
 # autoreconf -vif
 
+# ./gitsub.sh pull
+./autogen.sh
+
+# 手动编译 genaliases
+gcc -o genaliases ./lib/genaliases.c
+
+# 手动编译 genaliases_aix
+gcc -DUSE_AIX -o genaliases_aix ./lib/genaliases2.c lib/encodings_aix.def
+
+# 手动编译 gentranslit
+gcc -o gentranslit ./lib/gentranslit.c
+
 export TARGET=$NDK_TARGET-linux-android
 export TOOLCHAIN=$ANDROID_NDK_LATEST_HOME/toolchains/llvm/prebuilt/linux-x86_64
 export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
@@ -36,9 +48,6 @@ export NM=$TOOLCHAIN/bin/llvm-nm
 
 export CFLAGS="-O3 -flto=thin -I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
 export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${TARGET}/${API}"
-
-# ./gitsub.sh pull
-./autogen.sh
 
 cmake_build () {
   ANDROID_ABI=$1
