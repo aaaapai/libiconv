@@ -23,5 +23,5 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: file
-        path: build
+        path: **/build
         
