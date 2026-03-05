@@ -25,11 +25,26 @@ sudo apt install -y gettext autopoint libtool gperf
 # ./gitsub.sh pull
 ./autogen.sh
 
-# 手动编译 genaliases
-gcc -o genaliases ./lib/genaliases.c
 
-# 手动编译 gentranslit
-gcc -o gentranslit ./lib/gentranslit.c
+mkdir -p build_tools
+cd ./build_tools
+# 编译所有工具（使用相对路径）
+gcc -o genaliases ../lib/genaliases.c
+gcc -DUSE_AIX_ALIASES -o genaliases_sysaix ../lib/genaliases.c
+gcc -DUSE_HPUX_ALIASES -o genaliases_syshpux ../lib/genaliases.c
+gcc -DUSE_OSF1_ALIASES -o genaliases_sysosf1 ../lib/genaliases.c
+gcc -DUSE_SOLARIS_ALIASES -o genaliases_syssolaris ../lib/genaliases.c
+gcc -DUSE_AIX -o genaliases_aix ../lib/genaliases2.c
+gcc -DUSE_AIX -DUSE_AIX_ALIASES -o genaliases_aix_sysaix ../lib/genaliases2.c
+gcc -DUSE_OSF1 -o genaliases_osf1 ../lib/genaliases2.c
+gcc -DUSE_OSF1 -DUSE_OSF1_ALIASES -o genaliases_osf1_sysosf1 ../lib/genaliases2.c
+gcc -DUSE_DOS -o genaliases_dos ../lib/genaliases2.c
+gcc -DUSE_ZOS -o genaliases_zos ../lib/genaliases2.c
+gcc -DUSE_EXTRA -o genaliases_extra ../lib/genaliases2.c
+gcc -o genflags ../lib/genflags.c
+gcc -o gentranslit ../lib/gentranslit.c
+cd ..
+
 
 export TARGET=$NDK_TARGET-linux-android
 export TOOLCHAIN=$ANDROID_NDK_LATEST_HOME/toolchains/llvm/prebuilt/linux-x86_64
