@@ -139,7 +139,7 @@ function(genaliases SUFFIX DEFINITIONS)
 	target_compile_definitions(genaliases${SUFFIX} PRIVATE ${DEFINITIONS})
 	add_custom_command(
 		OUTPUT lib/aliases${SUFFIX}.gperf lib/canonical${SUFFIX}.sh lib/canonical_local${SUFFIX}.sh
-		COMMAND genaliases${SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/lib/aliases${SUFFIX}.gperf ${CMAKE_CURRENT_BINARY_DIR}/lib/canonical${SUFFIX}.sh ${CMAKE_CURRENT_BINARY_DIR}/lib/canonical_local${SUFFIX}.sh
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/genaliases${SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/lib/aliases${SUFFIX}.gperf ${CMAKE_CURRENT_BINARY_DIR}/lib/canonical${SUFFIX}.sh ${CMAKE_CURRENT_BINARY_DIR}/lib/canonical_local${SUFFIX}.sh
 		DEPENDS genaliases${SUFFIX}
 	)
 	add_custom_command(
@@ -175,7 +175,7 @@ function(genaliases2 SUFFIX TAG DEFINITIONS DEPENDENCIES)
 	target_compile_definitions(genaliases${SUFFIX} PRIVATE ${DEFINITIONS})
 	add_custom_command(
 		OUTPUT lib/aliases${SUFFIX}.h lib/canonical${SUFFIX}.h
-		COMMAND genaliases${SUFFIX} ${TAG} lib/aliases${SUFFIX}.h lib/canonical${SUFFIX}.h
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/genaliases${SUFFIX} ${TAG} lib/aliases${SUFFIX}.h lib/canonical${SUFFIX}.h
 		DEPENDS genaliases${SUFFIX}
 	)
 endfunction()
@@ -191,14 +191,14 @@ genaliases2("_extra" "extra" "USE_EXTRA" lib/encodings_extra.def)
 add_executable(genflags lib/converters.h lib/encodings.def lib/encodings_aix.def lib/encodings_dos.def lib/encodings_zos.def lib/encodings_extra.def lib/encodings_osf1.def lib/genflags.c)
 add_custom_command(
 	OUTPUT lib/flags.h
-	COMMAND genflags > lib/flags.h
+	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/genflags > lib/flags.h
 	DEPENDS lib/converters.h lib/encodings.def lib/encodings_aix.def lib/encodings_dos.def lib/encodings_zos.def lib/encodings_extra.def lib/encodings_osf1.def lib/genflags.c
 )
 
 add_executable(gentranslit lib/gentranslit.c lib/translit.def)
 add_custom_command(
 	OUTPUT lib/translit.h
-	COMMAND gentranslit < ${CMAKE_CURRENT_SOURCE_DIR}/lib/translit.def > lib/translit.h
+	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/gentranslit < ${CMAKE_CURRENT_SOURCE_DIR}/lib/translit.def > lib/translit.h
 	DEPENDS lib/gentranslit.c lib/translit.def
 )
 
